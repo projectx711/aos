@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AOS – Authorised Optical Service</title>
+<style>
+:root{--bg1:#e6f0ff;--bg2:#fff;--card:#fff;--tx:#0f1b34;--mu:#5b6b85;--bd:#dfe8f7;--b1:#1d5fd6;--acc:#2f7ae5;--sh:0 24px 60px rgba(37,99,235,.13);--grid:rgba(37,99,235,.06);--g:linear-gradient(90deg,#1d5fd6,#a5cdf8);--hg:linear-gradient(90deg,#1d5fd6,#3b82f6);--tint:rgba(37,99,235,.04);--tint2:rgba(37,99,235,.1);--dr:#9cc2f5;--okbg:#cfe3fb;--glow:rgba(37,99,235,.28);--onacc:#fff}
+:root[data-theme=dark]{--bg1:#1a1209;--bg2:#0d0905;--card:#1f1710;--tx:#fff3dc;--mu:#cfae7e;--bd:#3d2d18;--b1:#ff9a1f;--acc:#ffb020;--sh:0 24px 60px rgba(0,0,0,.5);--grid:rgba(255,170,60,.055);--g:linear-gradient(90deg,#ff7a18,#ffd23f);--hg:linear-gradient(90deg,#ff7a18,#ffd23f);--tint:rgba(255,160,40,.05);--tint2:rgba(255,160,40,.12);--dr:#c9862b;--okbg:#3b2a0e;--glow:rgba(255,140,30,.38);--onacc:#1a1005}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:env(safe-area-inset-top,0) 18px env(safe-area-inset-bottom,0);background:linear-gradient(var(--grid) 1px,transparent 1px) 0 0/34px 34px,linear-gradient(90deg,var(--grid) 1px,transparent 1px) 0 0/34px 34px,linear-gradient(180deg,var(--bg1),var(--bg2)) fixed}
+.w{max-width:1150px;margin:auto}
+header{display:flex;justify-content:space-between;align-items:center;padding:24px 0}
+.br{display:flex;align-items:center;gap:12px}
+.lg{border:1px solid var(--bd);width:48px;height:48px;border-radius:50%;background:#000;color:#fff;display:grid;place-items:center;font-weight:800;font-size:14px;letter-spacing:-.5px}
+.br b{display:block;font-size:19px;line-height:1.1}
+.br small{font-size:11px;letter-spacing:.2em;color:var(--mu)}
+.mode{width:44px;height:44px;border-radius:50%;border:1px solid var(--bd);background:var(--card);color:var(--acc);display:grid;place-items:center;padding:0;cursor:pointer;box-shadow:var(--sh)}
+h1{text-align:center;font-size:clamp(30px,6.2vw,58px);letter-spacing:-.03em;margin:44px 0 14px;font-weight:800;line-height:1.05}
+h1 span{background:var(--hg);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{text-align:center;color:var(--mu);max-width:640px;margin:0 auto 34px;font-size:clamp(15px,2.4vw,19px);line-height:1.6}
+.tabs{max-width:760px;margin:0 auto 18px;display:flex;background:var(--card);border:1px solid var(--bd);border-radius:999px;padding:5px}
+.tabs button{flex:1;border:0;background:none;color:var(--tx);padding:13px;border-radius:999px;font-size:15px;font-weight:600;cursor:pointer}
+.tabs button.on{background:var(--g);color:var(--onacc)}
+.card{max-width:760px;margin:auto;background:var(--card);border:1px solid var(--bd);border-radius:32px;padding:clamp(22px,5vw,44px);box-shadow:var(--sh);text-align:center}
+.hide{display:none!important}
+.drop{border:2px dashed var(--dr);border-radius:24px;min-height:clamp(230px,38vh,320px);padding:28px 16px;cursor:pointer;color:var(--mu);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:var(--tint);transition:.2s}
+.drop:hover,.drop.over{border-color:var(--b1);background:var(--tint2)}
+.drop .ic{width:68px;height:68px;border-radius:50%;background:var(--g);color:var(--onacc);display:grid;place-items:center;font-size:28px;box-shadow:0 10px 24px var(--glow);margin-bottom:6px}
+.drop b{color:var(--tx);font-size:clamp(18px,3.6vw,22px)}
+.drop span{font-size:14px}
+.file{display:flex;justify-content:space-between;gap:10px;padding:10px 4px;border-bottom:1px solid var(--bd);font-size:14px;text-align:left}
+.file span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.btn{display:block;width:100%;border:0;border-radius:14px;padding:16px;font-size:16px;font-weight:700;cursor:pointer;background:var(--g);color:var(--onacc);margin-top:18px}
+.btn.o{background:var(--card);color:var(--tx);border:1px solid var(--bd)}
+.btn:disabled{opacity:.5;cursor:default}
+.row{display:flex;gap:12px}.row .btn{margin-top:18px}
+.ok{width:58px;height:58px;border-radius:50%;background:var(--okbg);color:var(--b1);display:grid;place-items:center;font-size:26px;margin:0 auto 14px}
+.cb{display:flex;gap:10px;margin:22px 0 4px}
+.cb>*{flex:1;min-width:0;aspect-ratio:1;border-radius:16px;font-size:clamp(22px,6vw,38px);font-weight:800;text-align:center;display:grid;place-items:center}
+.cb div{background:var(--g);color:var(--onacc)}
+.cb input{border:1px solid var(--bd);background:var(--bg1);color:var(--tx);padding:0;width:100%;outline:0;text-transform:uppercase}
+.cb input:focus{border-color:var(--b1);box-shadow:0 0 0 3px var(--tint2)}
+.mu{color:var(--mu);font-size:14px}
+a.lk{color:var(--mu);cursor:pointer;display:inline-block;margin-top:20px;font-size:15px}
+.bar{height:10px;background:var(--bd);border-radius:9px;overflow:hidden;margin:20px 0 8px}
+.bar i{display:block;height:100%;width:0;background:var(--g);transition:width .2s}
+.ft{display:flex;justify-content:center;gap:clamp(24px,9vw,110px);margin:36px 0 40px;color:var(--mu);font-size:13px;text-align:center}
+.ft i{display:block;font-style:normal;font-size:20px;color:var(--acc);margin-bottom:4px}
+</style>
+</head>
+<body>
+<div class="w">
+<header>
+ <div class="br"><div class="lg">AOS</div><div><b>AOS</b><small>AUTHORISED OPTICAL SERVICE</small></div></div>
+ <svg width="0" height="0" style="position:absolute"><filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="2.4"/></filter></svg>
+ <button class="mode" id="mode" title="Theme"></button>
+</header>
+<h1>AUTHORISED <span>OPTICAL SERVICE</span></h1>
+<p class="sub">Drop a photo, video, PDF or ZIP — up to 5 GB. Share the code. Open it on any device.</p>
+<div class="tabs"><button id="tS" class="on">⬆ Send</button><button id="tR">⬇ Receive</button></div>
+
+<div class="card" id="send">
+ <div id="s1">
+  <div class="drop" id="drop"><div class="ic">⬆</div><b>Drop your file here</b><span>or click to browse · photo, video, PDF, ZIP · up to 5 GB</span></div>
+  <input type="file" id="fi" multiple class="hide">
+  <div id="list"></div>
+  <button class="btn hide" id="go">Upload &amp; get code</button>
+ </div>
+ <div id="s2" class="hide">
+  <b id="pt">Uploading…</b>
+  <div class="bar"><i id="pb"></i></div>
+  <div class="mu" id="pp">0%</div>
+ </div>
+ <div id="s3" class="hide">
+  <div class="ok">✓</div>
+  <b style="font-size:19px">Ready to share</b>
+  <div class="mu" style="margin-top:4px">Enter this code on the other device</div>
+  <div class="cb" id="cd"></div>
+  <div class="row"><button class="btn" id="cc">⧉ Copy code</button><button class="btn o" id="cl">⧉ Copy link</button></div>
+  <a class="lk" id="again">Send another file</a>
+ </div>
+</div>
+
+<div class="card hide" id="recv">
+ <div class="mu" style="font-size:15px">Enter the 6-character code</div>
+ <div class="cb" id="ci"></div>
+ <button class="btn" id="find" disabled>Find file</button>
+ <div class="mu" id="rp" style="margin-top:14px"></div>
+ <div id="res"></div>
+</div>
+
+<div class="ft"><div><i>🛡️</i>Private storage</div><div><i>⚡</i>Direct upload</div><div><i>∞</i>Never expires</div></div>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+let files=[],code='';
+const MAX=5*1024**3,PART=50*1024*1024;
+const fmt=n=>n>1e9?(n/1e9).toFixed(2)+' GB':n>1e6?(n/1e6).toFixed(1)+' MB':Math.ceil(n/1e3)+' KB';
+/* theme */
+const MOON='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" filter="url(#rough)"><path d="M20 14.6A8.4 8.4 0 1 1 9.4 4a6.7 6.7 0 0 0 10.6 10.6z"/><path d="M20.6 15.1A8.4 8.4 0 1 1 10 4.6" opacity=".55"/><path d="M17 4.5v3M15.5 6h3" stroke-width="1.3"/><path d="M21 9.5v2" stroke-width="1.2"/></svg>';
+const SUN='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" filter="url(#rough)"><circle cx="12" cy="12" r="4.2"/><circle cx="12.5" cy="11.6" r="4.2" opacity=".5"/><path d="M12 2.5v2.3M12 19.2v2.3M2.5 12h2.3M19.2 12h2.3M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>';
+function theme(t){document.documentElement.dataset.theme=t;$('#mode').innerHTML=t==='dark'?SUN:MOON}
+try{theme(localStorage.getItem('aos-theme')||'light')}catch(e){theme('light')}
+$('#mode').onclick=()=>{const t=document.documentElement.dataset.theme==='dark'?'light':'dark';theme(t);try{localStorage.setItem('aos-theme',t)}catch(e){}};
+/* tabs */
+function tab(s){$('#send').classList.toggle('hide',!s);$('#recv').classList.toggle('hide',s);$('#tS').classList.toggle('on',s);$('#tR').classList.toggle('on',!s)}
+$('#tS').onclick=()=>tab(true);$('#tR').onclick=()=>tab(false);
+/* pick files */
+function render(){$('#list').innerHTML=files.map(f=>`<div class="file"><span>📄 ${f.name.replace(/</g,'&lt;')}</span><span>${fmt(f.size)}</span></div>`).join('');$('#go').classList.toggle('hide',!files.length)}
+function add(l){for(const f of l){if(f.size===0)continue;if(f.size>MAX){alert(f.name+' is larger than 5 GB');continue}files.push(f)}render()}
+$('#drop').onclick=()=>$('#fi').click();
+$('#fi').onchange=e=>{add(e.target.files);e.target.value=''};
+$('#drop').ondragover=e=>{e.preventDefault();$('#drop').classList.add('over')};
+$('#drop').ondragleave=()=>$('#drop').classList.remove('over');
+$('#drop').ondrop=e=>{e.preventDefault();$('#drop').classList.remove('over');add(e.dataTransfer.files)};
+/* upload */
+function xhr(m,url,body,type,prog){return new Promise((ok,no)=>{const x=new XMLHttpRequest();x.open(m,url);if(type)x.setRequestHeader('Content-Type',type);if(prog)x.upload.onprogress=e=>prog(e.loaded);x.onload=()=>x.status===200?ok(JSON.parse(x.responseText)):no(new Error(x.responseText||x.status));x.onerror=()=>no(new Error('Network error'));x.send(body)})}
+function prog(p){const v=Math.min(100,Math.round(p*100));$('#pb').style.width=v+'%';$('#pp').textContent=v+'%'}
+function boxes(c){$('#cd').innerHTML='';[...c].forEach(ch=>{const d=document.createElement('div');d.textContent=ch;$('#cd').append(d)})}
+$('#go').onclick=async()=>{
+ $('#s1').classList.add('hide');$('#s2').classList.remove('hide');prog(0);
+ try{
+  const total=files.reduce((a,f)=>a+f.size,0);let done=0;
+  const r=await (await fetch('/api/new',{method:'POST'})).json();
+  if(!r.code)throw new Error(r.error||'failed');code=r.code;const c=encodeURIComponent(code);
+  for(const f of files){
+   $('#pt').textContent='Uploading '+f.name;
+   const s=await xhr('POST',`/api/mpstart/${c}?name=${encodeURIComponent(f.name)}`,null,f.type||'application/octet-stream');
+   const parts=[];
+   for(let o=0,n=1;o<f.size;o+=PART,n++){
+    const b=f.slice(o,o+PART),base=done;
+    parts.push(await xhr('PUT',`/api/mppart/${c}?key=${encodeURIComponent(s.key)}&id=${encodeURIComponent(s.uploadId)}&n=${n}`,b,'application/octet-stream',l=>prog((base+l)/total)));
+    done+=b.size;
+   }
+   await xhr('POST',`/api/mpend/${c}`,JSON.stringify({key:s.key,id:s.uploadId,parts}),'application/json');
+  }
+  boxes(code);$('#s2').classList.add('hide');$('#s3').classList.remove('hide');
+ }catch(e){alert('Upload failed: '+e.message);$('#s2').classList.add('hide');$('#s1').classList.remove('hide')}
+};
+function copy(t,btn,label){try{navigator.clipboard.writeText(t)}catch(e){}btn.textContent='✓ Copied';setTimeout(()=>btn.textContent=label,1500)}
+$('#cc').onclick=()=>copy(code,$('#cc'),'⧉ Copy code');
+$('#cl').onclick=()=>copy(location.origin+'/?c='+encodeURIComponent(code),$('#cl'),'⧉ Copy link');
+$('#again').onclick=()=>{files=[];code='';render();$('#s3').classList.add('hide');$('#s1').classList.remove('hide')};
+/* receive */
+const ins=[];
+for(let i=0;i<6;i++){const el=document.createElement('input');el.maxLength=1;el.autocomplete='off';el.autocapitalize='characters';ins.push(el);$('#ci').append(el);
+ el.oninput=()=>{el.value=el.value.toUpperCase();if(el.value&&i<5)ins[i+1].focus();chk()};
+ el.onkeydown=e=>{if(e.key==='Backspace'&&!el.value&&i>0)ins[i-1].focus();if(e.key==='Enter')find()};
+ el.onpaste=e=>{e.preventDefault();fill((e.clipboardData.getData('text')||'').trim())}}
+function fill(t){[...t.toUpperCase()].slice(0,6).forEach((ch,i)=>ins[i].value=ch);chk()}
+const val=()=>ins.map(i=>i.value).join('');
+function chk(){$('#find').disabled=val().length<6}
+async function find(){
+ const c=val();if(c.length<6)return;
+ $('#res').innerHTML='';$('#rp').textContent='Searching…';
+ try{
+  const r=await (await fetch('/api/list/'+encodeURIComponent(c))).json();
+  if(!r.files||!r.files.length){$('#rp').textContent='No file found for this code.';return}
+  $('#rp').textContent='';
+  r.files.forEach(f=>{
+   const row=document.createElement('div');row.className='file';
+   const n=document.createElement('span');n.textContent='📄 '+f.name+' ('+fmt(f.size)+')';
+   const a=document.createElement('a');a.href='/api/file/'+encodeURIComponent(c)+'?key='+encodeURIComponent(f.key);a.textContent='Download';a.style.cssText='color:var(--acc);font-weight:700;text-decoration:none';
+   row.append(n,a);$('#res').append(row);
+  });
+ }catch(e){$('#rp').textContent='Error: '+e.message}
+}
+$('#find').onclick=find;
+const q=new URLSearchParams(location.search).get('c');
+if(q){tab(false);fill(q);find()}
+</script>
+</body>
+</html>
